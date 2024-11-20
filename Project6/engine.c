@@ -95,11 +95,7 @@ int main(void) {
 				}
 				break;
 			case 'B': // 건설 모드 단축키 설정
-				if (!build_mode) {
-					build_mode = true;        
-					building_to_place = 'P';   
-					add_system_message("Build mode activated. Press ' ' to confirm, ESC to cancel.");
-				}
+				build_mode_toggle();
 				break;
 
 			case 'X':
