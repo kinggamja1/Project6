@@ -207,6 +207,14 @@ void start_building(char building_type) {
 	}
 }
 
+void cancel_building(void) {
+	if (build_timer > 0) { 
+		build_timer = 0;
+		building_to_place = '\0';
+		add_system_message("Building cancelled");
+	}
+}
+
 /* ================= subfunctions =================== */
 void intro(void) {
 	printf("DUNE 1.5\n");
