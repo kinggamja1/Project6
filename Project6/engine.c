@@ -202,6 +202,14 @@ void build_mode_toggle(void) {
 	}
 }
 
+void start_building(char building_type) {
+	if (selected_position.row >= 0 && selected_position.column >= 0) {
+		build_timer = 3000; 
+		building_to_place = building_type;
+		snprintf(system_state.message, SYSTEM_MESSAGE_LENGTH, "Building %c...", building_type);
+	}
+}
+
 /* ================= subfunctions =================== */
 void intro(void) {
 	printf("DUNE 1.5\n");
