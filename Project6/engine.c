@@ -154,17 +154,16 @@ int main(void) {
 		}
 
 
-		if (system_state.production_time_left > 0) {
-			system_state.production_time_left -= TICK;
-			if (system_state.production_time_left <= 0) {
+		if (build_timer > 0) {
+			build_timer -= TICK;
+			if (build_timer <= 0) {
 				if (selected_position.row >= 0 && selected_position.row < MAP_HEIGHT &&
 					selected_position.column >= 0 && selected_position.column + 1 < MAP_WIDTH) {
-					map[1][selected_position.row][selected_position.column + 1] = 'H';
-					snprintf(system_state.message, SYSTEM_MESSAGE_LENGTH, "A new Harvester ready!");
+					map[0][selected_position.row][selected_position.column] = building_to_place;
+					add_system_message("Building construction completed!");
 				}
-				else {
-					snprintf(system_state.message, SYSTEM_MESSAGE_LENGTH, "Cannot place Harvester outside of map boundaries");
-				}
+				build_mode = false;
+				building_to_place = ' ';
 			}
 		}
 
