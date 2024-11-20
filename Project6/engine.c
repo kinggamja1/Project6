@@ -120,11 +120,12 @@ int main(void) {
 					if (resource.spice >= 30) { // 30 spice가 필요하다고 예를 들음
 						printf("Plate를 건설합니다.\n"); 
 						resource.spice -= 30; 
-						build_timer = 3000;   
+						build_timer = 3000;  
+						start_building('P');
 					}
 					else {
 						printf("자원이 부족하여 건설할 수 없습니다.\n");
-						add_system_message("Not enough spice to build Plate.");
+						add_system_message("Not enough spice ");
 					}
 				}
 				else {
@@ -195,6 +196,14 @@ void build_mode_toggle(void) {
 	}
 	else {
 		add_system_message("건설 모드 비활성화");
+	}
+}
+
+void start_building(char building_type) {
+	if (selected_position.row >= 0 && selected_position.column >= 0) {
+		build_timer = 3000; 
+		building_to_place = building_type;
+		snprintf(system_state.message, SYSTEM_MESSAGE_LENGTH, "Building %c...", building_type);
 	}
 }
 
