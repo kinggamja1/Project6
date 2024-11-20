@@ -21,6 +21,9 @@ POSITION sample_obj_next_position(void);
 void produce_unit_or_building(char type);
 void sandworm_move(void);
 void add_system_message(const char* message);
+void build_mode_toggle(void);       
+void start_building(char building_type); 
+void cancel_building(void);        
 
 SYSTEM_STATE system_state = { "", 0 };
 
