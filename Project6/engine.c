@@ -99,10 +99,7 @@ int main(void) {
 				break;
 
 			case 'X':
-				if (system_state.production_time_left > 0) {
-					system_state.production_time_left = 0;
-					snprintf(system_state.message, SYSTEM_MESSAGE_LENGTH, "Production cancelled");
-				}
+				cancel_building(); 
 				break;
 			case 27:
 				selected_position.row = -1;
