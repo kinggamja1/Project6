@@ -94,6 +94,14 @@ int main(void) {
 					display_status_window(selected_position);
 				}
 				break;
+			case 'B': // 건설 모드 단축키 설정
+				if (!build_mode) {
+					build_mode = true;        
+					building_to_place = 'P';   
+					add_system_message("Build mode activated. Press ' ' to confirm, ESC to cancel.");
+				}
+				break;
+
 			case 'X':
 				if (system_state.production_time_left > 0) {
 					system_state.production_time_left = 0;
