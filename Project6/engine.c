@@ -120,7 +120,13 @@ int main(void) {
 				display_system_message();
 				break;
 			case 'P':
-				printf("Plate를 건설합니다.\n");
+				if (build_mode) {
+					printf("Plate를 건설합니다.\n");
+					build_timer = 3000; 
+				}
+				else {
+					printf("건설 모드가 활성화되지 않았습니다.\n");
+				}
 				break;
 			case 'F':
 				printf("Fremen을 생산합니다.\n");
