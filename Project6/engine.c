@@ -193,20 +193,12 @@ int main(void) {
 
 void build_mode_toggle(void) {
 	build_mode = !build_mode;
-	building_to_place = 'P'; 
+	building_to_place = 'P';
 	if (build_mode) {
-		add_system_message("Building mode activated: Press 'B' to build");
+		add_system_message("건설 모드 활성화");
 	}
 	else {
-		add_system_message("Building mode deactivated");
-	}
-}
-
-void start_building(char building_type) {
-	if (selected_position.row >= 0 && selected_position.column >= 0) {
-		build_timer = 3000; 
-		building_to_place = building_type;
-		snprintf(system_state.message, SYSTEM_MESSAGE_LENGTH, "Building %c...", building_type);
+		add_system_message("건설 모드 비활성화");
 	}
 }
 
