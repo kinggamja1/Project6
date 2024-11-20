@@ -119,10 +119,17 @@ int main(void) {
 				produce_unit_or_building('H');
 				display_system_message();
 				break;
-			case 'P':
+			case 'P': 
 				if (build_mode) {
-					printf("Plate를 건설합니다.\n");
-					build_timer = 3000; 
+					if (resource.spice >= 30) { // 30 spice가 필요하다고 예를 들음
+						printf("Plate를 건설합니다.\n"); 
+						resource.spice -= 30; 
+						build_timer = 3000;   
+					}
+					else {
+						printf("자원이 부족하여 건설할 수 없습니다.\n");
+						add_system_message("Not enough spice to build Plate.");
+					}
 				}
 				else {
 					printf("건설 모드가 활성화되지 않았습니다.\n");
