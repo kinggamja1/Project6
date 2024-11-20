@@ -24,10 +24,9 @@ void add_system_message(const char* message);
 
 SYSTEM_STATE system_state = { "", 0 };
 
-bool build_mode = false;              // 건설 모드 활성화 여부
-char building_to_place = ' ';         // 건설할 건물 종류
-int build_timer = 0;                  // 건설 시간 타이머 (예: 3000ms)          
-
+bool build_mode = false;              
+char building_to_place = ' ';        
+int build_timer = 0;
 
 /* ================= control =================== */
 int sys_clock = 0;		// system-wide clock(ms)
