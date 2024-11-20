@@ -171,6 +171,8 @@ int main(void) {
 				}
 				build_mode = false;
 				building_to_place = ' ';
+				selected_position.row = -1; 
+				selected_position.column = -1;
 			}
 		}
 
@@ -186,6 +188,17 @@ int main(void) {
 		sys_clock += TICK;
 
 
+	}
+}
+
+void build_mode_toggle(void) {
+	build_mode = !build_mode;
+	building_to_place = 'P'; 
+	if (build_mode) {
+		add_system_message("Building mode activated: Press 'B' to build");
+	}
+	else {
+		add_system_message("Building mode deactivated");
 	}
 }
 
