@@ -246,6 +246,37 @@ bool add_unit(char type, const char* name, int hp) {
 	return true;
 }
 
+bool remove_unit(const char* name) {
+	if (!unit_list->head) {
+		printf("유닛 목록이 비어있습니다.\n");
+		return false;
+	}
+
+	Unit* current = unit_list->head;
+	Unit* prev = NULL;
+
+	while (current) {
+		if (strcmp(current->name, name) == 0) {
+			if (prev) {
+				prev->next = current->next;
+			}
+			else {
+				unit_list->head = current->next;
+			}
+			free(current);
+			unit_list->count--;
+			printf("유닛 %s 삭제됨 (%d/%d).\n", name, unit_list->count, unit_list->supply_max);
+			return true;
+		}
+		prev = current;
+		current = current->next;
+	}
+
+	printf("유닛 %s 찾을 수 없음.\n", name);
+	return false;
+}
+
+
 void build_mode_toggle(void) {
 	build_mode = !build_mode;
 	building_to_place = 'P';
