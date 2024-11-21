@@ -19,6 +19,13 @@ typedef struct UnitList {
 	int supply_max;            
 } UnitList;
 
+UnitList* unit_list = NULL;
+void init_unit_list(int supply_max);
+bool add_unit(char type, const char* name, int hp);
+bool remove_unit(const char* name);
+void print_unit_list();
+void free_unit_list();
+
 
 extern char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH];
 extern RESOURCE resource;
@@ -76,6 +83,8 @@ SYSTEM_MESSAGE_LOG system_message_log = { .message_count = 0 };
 /* ================= main() =================== */
 int main(void) {
 	srand((unsigned int)time(NULL));
+	init_unit_list(5);  // 최대 유닛 수 5로 설정
+
 
 	init();
 	intro();
