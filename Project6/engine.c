@@ -6,6 +6,13 @@
 #include "io.h"
 #include "display.h"
 
+typedef struct Unit {
+	char type;                  
+	char name[20];              
+	int hp;                     
+	struct Unit* next;          
+} Unit;
+
 extern char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH];
 extern RESOURCE resource;
 extern POSITION selected_position;
