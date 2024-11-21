@@ -222,6 +222,30 @@ void init_unit_list(int supply_max) {
 	unit_list->supply_max = supply_max;
 }
 
+bool add_unit(char type, const char* name, int hp) {
+	if (unit_list->count >= unit_list->supply_max) {
+		printf("공급 제한 초과: 유닛 추가 실패.\n");
+		return false;
+	}
+
+	Unit* new_unit = (Unit*)malloc(sizeof(Unit));
+	if (!new_unit) {
+		printf("유닛 메모리 할당 실패.\n");
+		return false;
+	}
+
+	new_unit->type = type;
+	strncpy(new_unit->name, name, sizeof(new_unit->name) - 1);
+	new_unit->name[sizeof(new_unit->name) - 1] = '\0';
+	new_unit->hp = hp;
+	new_unit->next = unit_list->head;
+	unit_list->head = new_unit;
+	unit_list->count++;
+
+	printf("유닛 %s 추가됨 (%d/%d).\n", name, unit_list->count, unit_list->supply_max);
+	return true;
+}
+
 void build_mode_toggle(void) {
 	build_mode = !build_mode;
 	building_to_place = 'P';
