@@ -276,6 +276,20 @@ bool remove_unit(const char* name) {
 	return false;
 }
 
+void print_unit_list() {
+	if (!unit_list || !unit_list->head) {
+		printf("유닛 목록이 비어있습니다.\n");
+		return;
+	}
+
+	printf("유닛 목록 (%d/%d):\n", unit_list->count, unit_list->supply_max);
+	Unit* current = unit_list->head;
+	while (current) {
+		printf("- 이름: %s, 타입: %c, 체력: %d\n", current->name, current->type, current->hp);
+		current = current->next;
+	}
+}
+
 
 void build_mode_toggle(void) {
 	build_mode = !build_mode;
