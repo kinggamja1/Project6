@@ -211,6 +211,17 @@ int main(void) {
 	}
 }
 
+void init_unit_list(int supply_max) {
+	unit_list = (UnitList*)malloc(sizeof(UnitList));
+	if (!unit_list) {
+		printf("유닛 리스트 초기화 실패.\n");
+		exit(1);
+	}
+	unit_list->head = NULL;
+	unit_list->count = 0;
+	unit_list->supply_max = supply_max;
+}
+
 void build_mode_toggle(void) {
 	build_mode = !build_mode;
 	building_to_place = 'P';
