@@ -13,6 +13,13 @@ typedef struct Unit {
 	struct Unit* next;          
 } Unit;
 
+typedef struct UnitList {
+	Unit* head;                
+	int count;                 
+	int supply_max;            
+} UnitList;
+
+
 extern char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH];
 extern RESOURCE resource;
 extern POSITION selected_position;
