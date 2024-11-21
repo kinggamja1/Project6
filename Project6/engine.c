@@ -290,6 +290,21 @@ void print_unit_list() {
 	}
 }
 
+void free_unit_list() {
+	if (!unit_list) return;
+
+	Unit* current = unit_list->head;
+	while (current) {
+		Unit* to_free = current;
+		current = current->next;
+		free(to_free);
+	}
+
+	free(unit_list);
+	unit_list = NULL;
+	printf("유닛 리스트 메모리 해제 완료.\n");
+}
+
 
 void build_mode_toggle(void) {
 	build_mode = !build_mode;
