@@ -46,6 +46,14 @@ bool remove_unit(const char* name);
 void print_unit_list();
 void free_unit_list();
 
+void init_harvesters();
+bool add_harvester(const char* name, int hp, POSITION position);
+void update_harvesters();
+void harvester_command(Harvester* harvester, POSITION target, HarvesterState command);
+void harvester_harvest(Harvester* harvester);
+void harvester_return(Harvester* harvester);
+
+
 
 extern char map[N_LAYER][MAP_HEIGHT][MAP_WIDTH];
 extern RESOURCE resource;
