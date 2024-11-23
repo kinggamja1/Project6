@@ -396,6 +396,19 @@ void harvester_combat(Harvester* harvester, Soldier* enemies, int num_enemies) {
 	}
 }
 
+void update_combat(Soldier* soldiers, int num_soldiers, Harvester* harvesters, int num_harvesters, Soldier* enemies, int num_enemies) {
+	for (int i = 0; i < num_soldiers; i++) {
+		if (soldiers[i].hp > 0) {
+			soldier_combat(&soldiers[i], enemies, num_enemies);
+		}
+	}
+	for (int i = 0; i < num_harvesters; i++) {
+		if (harvesters[i].hp > 0) {
+			harvester_combat(&harvesters[i], enemies, num_enemies);
+		}
+	}
+}
+
 /* ================= control =================== */
 int sys_clock = 0;		// system-wide clock(ms)
 CURSOR cursor = { { 1, 1 }, {1, 1} };
