@@ -6,6 +6,12 @@
 #include "io.h"
 #include "display.h"
 
+typedef enum {
+	HARVESTER_WAITING,
+	HARVESTER_MOVING,
+	HARVESTER_HARVESTING
+} HarvesterState;
+
 typedef struct Unit {
 	char type;                  
 	char name[20];              
