@@ -7,6 +7,12 @@
 #include "display.h"
 
 typedef enum {
+	UNIT_WAITING,   
+	UNIT_MOVING,     
+	UNIT_PATROLLING  
+} UnitState;
+
+typedef enum {
 	HARVESTER_WAITING,
 	HARVESTER_MOVING,
 	HARVESTER_HARVESTING,
@@ -177,25 +183,32 @@ void harvester_command(Harvester* harvester, POSITION target, HarvesterState com
 	}
 }
 
+void harvester_harvest(Harvester* harvester) {
+	if (harvester->state != HARVESTER_HARVESTING) return;
+
+	int spice_to_collect = rand() % 3 + 2;
+	harvester->spice_carried += spice_to_collect;
+	printf("Harvester '%s' collected %d spice. Total: %d\n",
+		harvester->name, spice_to_collect, harvester->spice_carried);
+
+	harvester->state = HARVESTER_RETURNING;
+	harvester->target = (POSITION){ 1, 1 };
+}
+
 void harvester_return(Harvester* harvester) {
 	if (harvester->state != HARVESTER_RETURNING) return; 
 
 	
 	if (harvester->position.row == harvester->target.row &&
 		harvester->position.column == harvester->target.column) {
-
-	
 		int spice_to_store = harvester->spice_carried;
 		if (resource.spice + spice_to_store > resource.spice_max) {
 			spice_to_store = resource.spice_max - resource.spice; 
 		}
-
 		resource.spice += spice_to_store;
 		harvester->spice_carried -= spice_to_store;
-
 		printf("Harvester '%s' delivered %d spice. Base total: %d\n",
 			harvester->name, spice_to_store, resource.spice);
-
 		harvester->state = HARVESTER_WAITING;
 		harvester->target = harvester->position; 
 	}
@@ -206,14 +219,12 @@ void harvester_return(Harvester* harvester) {
 		else if (harvester->position.row > harvester->target.row) {
 			harvester->position.row--;
 		}
-
 		if (harvester->position.column < harvester->target.column) {
 			harvester->position.column++;
 		}
 		else if (harvester->position.column > harvester->target.column) {
 			harvester->position.column--;
 		}
-
 		printf("Harvester '%s' is returning to base. Current position: (%d, %d)\n",
 			harvester->name, harvester->position.row, harvester->position.column);
 	}
