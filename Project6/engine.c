@@ -239,6 +239,19 @@ int main(void) {
 	}
 }
 
+void init_harvesters() {
+	num_harvesters = 0;
+	for (int i = 0; i < MAX_HARVESTERS; i++) {
+		harvesters[i].name[0] = '\0';
+		harvesters[i].hp = 0;
+		harvesters[i].state = HARVESTER_WAITING;
+		harvesters[i].position = (POSITION){ -1, -1 };
+		harvesters[i].target = (POSITION){ -1, -1 };
+		harvesters[i].spice_carried = 0;
+		harvesters[i].timer = 0;
+	}
+}
+
 void init_unit_list(int supply_max) {
 	unit_list = (UnitList*)malloc(sizeof(UnitList));
 	if (!unit_list) {
