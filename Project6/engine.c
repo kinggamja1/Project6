@@ -380,6 +380,22 @@ void harvester_return(Harvester* harvester) {
 	}
 }
 
+void harvester_combat(Harvester* harvester, Soldier* enemies, int num_enemies) {
+	for (int i = 0; i < num_enemies; i++) {
+		Soldier* enemy = &enemies[i];
+		int distance = abs(harvester->position.row - enemy->position.row) +
+			abs(harvester->position.column - enemy->position.column);
+		if (distance <= ATTACK_RANGE && enemy->hp > 0) {
+			printf("%s is defending against %s\n", harvester->name, enemy->name);
+			enemy->hp -= harvester->attack_power;
+			if (enemy->hp <= 0) {
+				printf("%s has been defeated by %s!\n", enemy->name, harvester->name);
+				enemy->position = (POSITION){ -1, -1 }; // Á¦°Å
+			}
+		}
+	}
+}
+
 /* ================= control =================== */
 int sys_clock = 0;		// system-wide clock(ms)
 CURSOR cursor = { { 1, 1 }, {1, 1} };
