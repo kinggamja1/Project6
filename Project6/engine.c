@@ -12,6 +12,16 @@ typedef enum {
 	HARVESTER_HARVESTING
 } HarvesterState;
 
+typedef struct {
+	char name[20];             
+	int hp;                   
+	HarvesterState state;       
+	POSITION position;         
+	POSITION target;           
+	int spice_carried;         
+	int timer;                  
+} Harvester;
+
 typedef struct Unit {
 	char type;                  
 	char name[20];              
