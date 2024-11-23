@@ -193,16 +193,16 @@ void harvester_harvest(Harvester* harvester) {
 }
 
 void harvester_return(Harvester* harvester) {
-	if (harvester->state != HARVESTER_RETURNING) return; // 상태 확인
+	if (harvester->state != HARVESTER_RETURNING) return; 
 
-	// 본진 도착 확인
+	
 	if (harvester->position.row == harvester->target.row &&
 		harvester->position.column == harvester->target.column) {
 
-		// 스파이스를 본진 자원에 전달
+	
 		int spice_to_store = harvester->spice_carried;
 		if (resource.spice + spice_to_store > resource.spice_max) {
-			spice_to_store = resource.spice_max - resource.spice; // 최대 용량 제한
+			spice_to_store = resource.spice_max - resource.spice; 
 		}
 
 		resource.spice += spice_to_store;
@@ -211,12 +211,10 @@ void harvester_return(Harvester* harvester) {
 		printf("Harvester '%s' delivered %d spice. Base total: %d\n",
 			harvester->name, spice_to_store, resource.spice);
 
-		// 대기 상태로 전환
 		harvester->state = HARVESTER_WAITING;
-		harvester->target = harvester->position; // 대기 위치 유지
+		harvester->target = harvester->position; 
 	}
 	else {
-		// 목표 위치로 이동 (단순 이동 예제)
 		if (harvester->position.row < harvester->target.row) {
 			harvester->position.row++;
 		}
