@@ -23,6 +23,17 @@ typedef struct {
 	int timer;
 } Soldier;
 
+#define MAX_SOLDIERS 10
+Soldier soldiers[MAX_SOLDIERS];
+int num_soldiers = 0;
+
+void init_soldiers();
+bool add_soldier(const char* name, int hp, POSITION position);
+void update_soldiers();
+void move_command(Soldier* soldier, POSITION target);
+void patrol_command(Soldier* soldier, POSITION start, POSITION end);
+
+
 
 typedef enum {
 	HARVESTER_WAITING,
