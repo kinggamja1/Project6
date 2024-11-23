@@ -192,6 +192,50 @@ void harvester_harvest(Harvester* harvester) {
 	harvester->target = (POSITION){ 1, 1 }; 
 }
 
+void harvester_return(Harvester* harvester) {
+	if (harvester->state != HARVESTER_RETURNING) return; // 상태 확인
+
+	// 본진 도착 확인
+	if (harvester->position.row == harvester->target.row &&
+		harvester->position.column == harvester->target.column) {
+
+		// 스파이스를 본진 자원에 전달
+		int spice_to_store = harvester->spice_carried;
+		if (resource.spice + spice_to_store > resource.spice_max) {
+			spice_to_store = resource.spice_max - resource.spice; // 최대 용량 제한
+		}
+
+		resource.spice += spice_to_store;
+		harvester->spice_carried -= spice_to_store;
+
+		printf("Harvester '%s' delivered %d spice. Base total: %d\n",
+			harvester->name, spice_to_store, resource.spice);
+
+		// 대기 상태로 전환
+		harvester->state = HARVESTER_WAITING;
+		harvester->target = harvester->position; // 대기 위치 유지
+	}
+	else {
+		// 목표 위치로 이동 (단순 이동 예제)
+		if (harvester->position.row < harvester->target.row) {
+			harvester->position.row++;
+		}
+		else if (harvester->position.row > harvester->target.row) {
+			harvester->position.row--;
+		}
+
+		if (harvester->position.column < harvester->target.column) {
+			harvester->position.column++;
+		}
+		else if (harvester->position.column > harvester->target.column) {
+			harvester->position.column--;
+		}
+
+		printf("Harvester '%s' is returning to base. Current position: (%d, %d)\n",
+			harvester->name, harvester->position.row, harvester->position.column);
+	}
+}
+
 /* ================= control =================== */
 int sys_clock = 0;		// system-wide clock(ms)
 CURSOR cursor = { { 1, 1 }, {1, 1} };
