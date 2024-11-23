@@ -12,6 +12,18 @@ typedef enum {
 	UNIT_PATROLLING  
 } UnitState;
 
+typedef struct {
+	char name[20];
+	int hp;
+	UnitState state;
+	POSITION position;
+	POSITION target;
+	POSITION patrol_start; 
+	POSITION patrol_end;   
+	int timer;
+} Soldier;
+
+
 typedef enum {
 	HARVESTER_WAITING,
 	HARVESTER_MOVING,
