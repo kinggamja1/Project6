@@ -175,6 +175,23 @@ void harvester_command(Harvester* harvester, POSITION target, HarvesterState com
 	}
 }
 
+void harvester_harvest(Harvester* harvester) {
+	if (harvester->state != HARVESTER_HARVESTING) return;
+	if (harvester->timer > 0) {
+		harvester->timer -= TICK; 
+		return;
+	}
+
+	int spice_to_collect = rand() % 3 + 2; 
+	harvester->spice_carried += spice_to_collect;
+	printf("Harvester '%s' collected %d spice. Total: %d\n",
+		harvester->name, spice_to_collect, harvester->spice_carried);
+
+	// 본진으로 돌아갈 상태로 변경
+	harvester->state = HARVESTER_RETURNING;
+	harvester->target = (POSITION){ 1, 1 }; 
+}
+
 /* ================= control =================== */
 int sys_clock = 0;		// system-wide clock(ms)
 CURSOR cursor = { { 1, 1 }, {1, 1} };
