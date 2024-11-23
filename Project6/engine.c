@@ -321,6 +321,20 @@ void update_harvesters() {
 	}
 }
 
+void harvester_command(Harvester* harvester, POSITION target, HarvesterState command) {
+	if (command == HARVESTER_MOVING) {
+		harvester->state = HARVESTER_MOVING;
+		harvester->target = target;
+		harvester->timer = 500;  // 이동 시간
+	}
+	else if (command == HARVESTER_HARVESTING) {
+		harvester->state = HARVESTER_HARVESTING;
+		harvester->target = target;
+		harvester->timer = 3000;  // 수확 시간
+	}
+}
+
+
 
 void init_unit_list(int supply_max) {
 	unit_list = (UnitList*)malloc(sizeof(UnitList));
