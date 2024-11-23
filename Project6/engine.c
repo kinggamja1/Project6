@@ -21,6 +21,7 @@ typedef struct {
 	POSITION patrol_start; 
 	POSITION patrol_end;   
 	int timer;
+	int attack_power;
 } Soldier;
 
 #define MAX_SOLDIERS 10
@@ -133,6 +134,8 @@ void update_soldiers() {
 		}
 	}
 }
+
+
 
 
 typedef enum {
@@ -387,8 +390,9 @@ int main(void) {
 	init_unit_list(5);  // 최대 유닛 수 5로 설정
 
 	init_harvesters();
-    add_harvester("Harvester1", 100, (POSITION){2, 2});
-    add_harvester("Harvester2", 100, (POSITION){3, 3});
+	init_soldiers();
+	add_soldier("Soldier1", 100, (POSITION) { 3, 3 });
+    add_harvester("Harvester1", 100, (POSITION){5, 5});
 
 
 	init();
@@ -398,7 +402,8 @@ int main(void) {
 	int last_clear_time = 0;
 
 
-
+	move_command(&soldiers[0], (POSITION) { 7, 7 });
+	harvester_command(&harvesters[0], (POSITION) { 6, 6 }, HARVESTER_MOVING);
 	while (1) {
 		// loop 돌 때마다(즉, TICK==10ms마다) 키 입력 확인
 		KEY key = get_key();
