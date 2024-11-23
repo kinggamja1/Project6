@@ -225,6 +225,7 @@ void init_harvesters() {
 		harvesters[i].position = (POSITION){ -1, -1 };
 		harvesters[i].target = (POSITION){ -1, -1 };
 		harvesters[i].spice_carried = 0;
+		harvesters[i].attack_power = 5;
 		harvesters[i].timer = 0;
 	}
 }
