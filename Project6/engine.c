@@ -59,7 +59,11 @@ bool add_soldier(const char* name, int hp, POSITION position) {
 	return true;
 }
 
-
+void move_command(Soldier* soldier, POSITION target) {
+	soldier->state = UNIT_MOVING;
+	soldier->target = target;
+	soldier->timer = 500; 
+}
 
 
 typedef enum {
