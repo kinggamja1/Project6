@@ -152,7 +152,8 @@ typedef struct {
 	POSITION position;         
 	POSITION target;           
 	int spice_carried;         
-	int timer;                  
+	int timer;  
+	int attack_power;
 } Harvester;
 
 #define MAX_HARVESTERS 10
