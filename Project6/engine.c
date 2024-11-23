@@ -65,6 +65,14 @@ void move_command(Soldier* soldier, POSITION target) {
 	soldier->timer = 500; 
 }
 
+void patrol_command(Soldier* soldier, POSITION start, POSITION end) {
+	soldier->state = UNIT_PATROLLING;
+	soldier->patrol_start = start;
+	soldier->patrol_end = end;
+	soldier->target = end; // Start by moving to end
+	soldier->timer = 500;
+}
+
 
 typedef enum {
 	HARVESTER_WAITING,
