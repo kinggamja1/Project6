@@ -73,6 +73,67 @@ void patrol_command(Soldier* soldier, POSITION start, POSITION end) {
 	soldier->timer = 500;
 }
 
+void update_soldiers() {
+	for (int i = 0; i < num_soldiers; i++) {
+		Soldier* soldier = &soldiers[i];
+		switch (soldier->state) {
+		case UNIT_WAITING:
+			break; // Do nothing
+		case UNIT_MOVING:
+			if (soldier->timer <= 0) {
+				if (soldier->position.row == soldier->target.row &&
+					soldier->position.column == soldier->target.column) {
+					soldier->state = UNIT_WAITING;
+				}
+				else {
+					if (soldier->position.row < soldier->target.row)
+						soldier->position.row++;
+					else if (soldier->position.row > soldier->target.row)
+						soldier->position.row--;
+
+					if (soldier->position.column < soldier->target.column)
+						soldier->position.column++;
+					else if (soldier->position.column > soldier->target.column)
+						soldier->position.column--;
+
+					soldier->timer = 500;
+				}
+			}
+			else {
+				soldier->timer -= TICK;
+			}
+			break;
+		case UNIT_PATROLLING:
+			if (soldier->timer <= 0) {
+				if (soldier->position.row == soldier->target.row &&
+					soldier->position.column == soldier->target.column) {
+					soldier->target = (soldier->target.row == soldier->patrol_start.row &&
+						soldier->target.column == soldier->patrol_start.column)
+						? soldier->patrol_end
+						: soldier->patrol_start;
+				}
+				else {
+					if (soldier->position.row < soldier->target.row)
+						soldier->position.row++;
+					else if (soldier->position.row > soldier->target.row)
+						soldier->position.row--;
+
+					if (soldier->position.column < soldier->target.column)
+						soldier->position.column++;
+					else if (soldier->position.column > soldier->target.column)
+						soldier->position.column--;
+
+					soldier->timer = 500;
+				}
+			}
+			else {
+				soldier->timer -= TICK;
+			}
+			break;
+		}
+	}
+}
+
 
 typedef enum {
 	HARVESTER_WAITING,
