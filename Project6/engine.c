@@ -267,6 +267,61 @@ bool add_harvester(const char* name, int hp, POSITION position) {
 	return true;
 }
 
+void update_harvesters() {
+	for (int i = 0; i < num_harvesters; i++) {
+		Harvester* harvester = &harvesters[i];
+		switch (harvester->state) {
+		case HARVESTER_WAITING:
+			break;
+		case HARVESTER_MOVING:
+			if (harvester->timer <= 0) {
+				if (harvester->position.row == harvester->target.row &&
+					harvester->position.column == harvester->target.column) {
+					if (map[0][harvester->target.row][harvester->target.column] == TERRAIN_SPICE) {
+						harvester->state = HARVESTER_HARVESTING;
+						harvester->timer = 3000;  
+					}
+					else {
+						harvester->state = HARVESTER_WAITING;
+					}
+				}
+				else {
+					if (harvester->position.row < harvester->target.row)
+						harvester->position.row++;
+					else if (harvester->position.row > harvester->target.row)
+						harvester->position.row--;
+
+					if (harvester->position.column < harvester->target.column)
+						harvester->position.column++;
+					else if (harvester->position.column > harvester->target.column)
+						harvester->position.column--;
+					harvester->timer = 500;  
+				}
+			}
+			else {
+				harvester->timer -= TICK;
+			}
+			break;
+		case HARVESTER_HARVESTING:
+			if (harvester->timer <= 0) {
+				harvester->spice_carried += 5; 
+				if (harvester->spice_carried >= 20) {
+					harvester->state = HARVESTER_MOVING;
+					harvester->target = (POSITION){ 1, 1 };  
+				}
+				else {
+					harvester->timer = 3000;  
+				}
+			}
+			else {
+				harvester->timer -= TICK;
+			}
+			break;
+		}
+	}
+}
+
+
 void init_unit_list(int supply_max) {
 	unit_list = (UnitList*)malloc(sizeof(UnitList));
 	if (!unit_list) {
