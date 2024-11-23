@@ -252,6 +252,21 @@ void init_harvesters() {
 	}
 }
 
+bool add_harvester(const char* name, int hp, POSITION position) {
+	if (num_harvesters >= MAX_HARVESTERS) return false;
+
+	Harvester* harvester = &harvesters[num_harvesters++];
+	snprintf(harvester->name, sizeof(harvester->name), "%s", name);
+	harvester->hp = hp;
+	harvester->state = HARVESTER_WAITING;
+	harvester->position = position;
+	harvester->target = position;
+	harvester->spice_carried = 0;
+	harvester->timer = 0;
+
+	return true;
+}
+
 void init_unit_list(int supply_max) {
 	unit_list = (UnitList*)malloc(sizeof(UnitList));
 	if (!unit_list) {
