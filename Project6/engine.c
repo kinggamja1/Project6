@@ -27,6 +27,7 @@ typedef struct {
 #define MAX_SOLDIERS 10
 Soldier soldiers[MAX_SOLDIERS];
 int num_soldiers = 0;
+Soldier enemies[MAX_SOLDIERS];
 
 void init_soldiers();
 bool add_soldier(const char* name, int hp, POSITION position);
@@ -44,6 +45,7 @@ void init_soldiers() {
 		soldiers[i].target = (POSITION){ -1, -1 };
 		soldiers[i].patrol_start = (POSITION){ -1, -1 };
 		soldiers[i].patrol_end = (POSITION){ -1, -1 };
+		soldiers[i].attack_power = 10; 
 		soldiers[i].timer = 0;
 	}
 }
