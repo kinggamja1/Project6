@@ -6,6 +6,10 @@
 #include "io.h"
 #include "display.h"
 
+#define ATTACK_RANGE 1
+#define ATTACK_INTERVAL 1000 
+#define TICK 10
+
 typedef enum {
 	UNIT_WAITING,   
 	UNIT_MOVING,     
@@ -133,6 +137,22 @@ void update_soldiers() {
 				soldier->timer -= TICK;
 			}
 			break;
+		}
+	}
+}
+
+void soldier_combat(Soldier* soldier, Soldier* enemies, int num_enemies) {
+	for (int i = 0; i < num_enemies; i++) {
+		Soldier* enemy = &enemies[i];
+		int distance = abs(soldier->position.row - enemy->position.row) +
+			abs(soldier->position.column - enemy->position.column);
+		if (distance <= ATTACK_RANGE && enemy->hp > 0) {
+			printf("%s is attacking %s\n", soldier->name, enemy->name);
+			enemy->hp -= soldier->attack_power;
+			if (enemy->hp <= 0) {
+				printf("%s has been defeated!\n", enemy->name);
+				enemy->position = (POSITION){ -1, -1 }; 
+			}
 		}
 	}
 }
