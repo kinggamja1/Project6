@@ -33,6 +33,21 @@ void update_soldiers();
 void move_command(Soldier* soldier, POSITION target);
 void patrol_command(Soldier* soldier, POSITION start, POSITION end);
 
+void init_soldiers() {
+	num_soldiers = 0;
+	for (int i = 0; i < MAX_SOLDIERS; i++) {
+		soldiers[i].name[0] = '\0';
+		soldiers[i].hp = 0;
+		soldiers[i].state = UNIT_WAITING;
+		soldiers[i].position = (POSITION){ -1, -1 };
+		soldiers[i].target = (POSITION){ -1, -1 };
+		soldiers[i].patrol_start = (POSITION){ -1, -1 };
+		soldiers[i].patrol_end = (POSITION){ -1, -1 };
+		soldiers[i].timer = 0;
+	}
+}
+
+
 
 
 typedef enum {
