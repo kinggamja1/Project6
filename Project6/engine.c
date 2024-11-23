@@ -22,6 +22,10 @@ typedef struct {
 	int timer;                  
 } Harvester;
 
+#define MAX_HARVESTERS 10
+Harvester harvesters[MAX_HARVESTERS];
+int num_harvesters = 0;
+
 typedef struct Unit {
 	char type;                  
 	char name[20];              
