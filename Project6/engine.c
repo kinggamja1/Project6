@@ -169,24 +169,12 @@ void update_harvesters() {
 void harvester_command(Harvester* harvester, POSITION target, HarvesterState command) {
 	harvester->state = command;
 	harvester->target = target;
-	harvester->timer = 500;
-}
-
-void harvester_harvest(Harvester* harvester) {
-	if (harvester->state != HARVESTER_HARVESTING) return;
-	if (harvester->timer > 0) {
-		harvester->timer -= TICK; 
-		return;
+	if (command == HARVESTER_MOVING) {
+		harvester->timer = 500;  
 	}
-
-	int spice_to_collect = rand() % 3 + 2; 
-	harvester->spice_carried += spice_to_collect;
-	printf("Harvester '%s' collected %d spice. Total: %d\n",
-		harvester->name, spice_to_collect, harvester->spice_carried);
-
-	// 본진으로 돌아갈 상태로 변경
-	harvester->state = HARVESTER_RETURNING;
-	harvester->target = (POSITION){ 1, 1 }; 
+	else if (command == HARVESTER_HARVESTING) {
+		harvester->timer = 3000;  
+	}
 }
 
 void harvester_return(Harvester* harvester) {
