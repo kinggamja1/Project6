@@ -80,6 +80,101 @@ bool build_mode = false;
 char building_to_place = ' ';        
 int build_timer = 0;
 
+void init_harvesters() {
+	num_harvesters = 0;
+	for (int i = 0; i < MAX_HARVESTERS; i++) {
+		harvesters[i].name[0] = '\0';
+		harvesters[i].hp = 0;
+		harvesters[i].state = HARVESTER_WAITING;
+		harvesters[i].position = (POSITION){ -1, -1 };
+		harvesters[i].target = (POSITION){ -1, -1 };
+		harvesters[i].spice_carried = 0;
+		harvesters[i].timer = 0;
+	}
+}
+
+bool add_harvester(const char* name, int hp, POSITION position) {
+	if (num_harvesters >= MAX_HARVESTERS) return false;
+
+	Harvester* harvester = &harvesters[num_harvesters++];
+	snprintf(harvester->name, sizeof(harvester->name), "%s", name);
+	harvester->hp = hp;
+	harvester->state = HARVESTER_WAITING;
+	harvester->position = position;
+	harvester->target = position;
+	harvester->spice_carried = 0;
+	harvester->timer = 0;
+
+	return true;
+}
+
+void update_harvesters() {
+	for (int i = 0; i < num_harvesters; i++) {
+		Harvester* harvester = &harvesters[i];
+		switch (harvester->state) {
+		case HARVESTER_WAITING:
+			break;
+		case HARVESTER_MOVING:
+			if (harvester->timer <= 0) {
+				if (harvester->position.row == harvester->target.row &&
+					harvester->position.column == harvester->target.column) {
+					if (map[0][harvester->target.row][harvester->target.column] == TERRAIN_SPICE) {
+						harvester->state = HARVESTER_HARVESTING;
+						harvester->timer = 3000;
+					}
+					else {
+						harvester->state = HARVESTER_WAITING;
+					}
+				}
+				else {
+					if (harvester->position.row < harvester->target.row)
+						harvester->position.row++;
+					else if (harvester->position.row > harvester->target.row)
+						harvester->position.row--;
+
+					if (harvester->position.column < harvester->target.column)
+						harvester->position.column++;
+					else if (harvester->position.column > harvester->target.column)
+						harvester->position.column--;
+					harvester->timer = 500;
+				}
+			}
+			else {
+				harvester->timer -= TICK;
+			}
+			break;
+		case HARVESTER_HARVESTING:
+			if (harvester->timer <= 0) {
+				harvester->spice_carried += 5;
+				if (harvester->spice_carried >= 20) {
+					harvester->state = HARVESTER_MOVING;
+					harvester->target = (POSITION){ 1, 1 };
+				}
+				else {
+					harvester->timer = 3000;
+				}
+			}
+			else {
+				harvester->timer -= TICK;
+			}
+			break;
+		}
+	}
+}
+
+void harvester_command(Harvester* harvester, POSITION target, HarvesterState command) {
+	if (command == HARVESTER_MOVING) {
+		harvester->state = HARVESTER_MOVING;
+		harvester->target = target;
+		harvester->timer = 500;  // 이동 시간
+	}
+	else if (command == HARVESTER_HARVESTING) {
+		harvester->state = HARVESTER_HARVESTING;
+		harvester->target = target;
+		harvester->timer = 3000;  // 수확 시간
+	}
+}
+
 /* ================= control =================== */
 int sys_clock = 0;		// system-wide clock(ms)
 CURSOR cursor = { { 1, 1 }, {1, 1} };
@@ -112,6 +207,10 @@ SYSTEM_MESSAGE_LOG system_message_log = { .message_count = 0 };
 int main(void) {
 	srand((unsigned int)time(NULL));
 	init_unit_list(5);  // 최대 유닛 수 5로 설정
+
+	init_harvesters();
+    add_harvester("Harvester1", 100, (POSITION){2, 2});
+    add_harvester("Harvester2", 100, (POSITION){3, 3});
 
 
 	init();
@@ -236,101 +335,6 @@ int main(void) {
 		sys_clock += TICK;
 
 
-	}
-}
-
-void init_harvesters() {
-	num_harvesters = 0;
-	for (int i = 0; i < MAX_HARVESTERS; i++) {
-		harvesters[i].name[0] = '\0';
-		harvesters[i].hp = 0;
-		harvesters[i].state = HARVESTER_WAITING;
-		harvesters[i].position = (POSITION){ -1, -1 };
-		harvesters[i].target = (POSITION){ -1, -1 };
-		harvesters[i].spice_carried = 0;
-		harvesters[i].timer = 0;
-	}
-}
-
-bool add_harvester(const char* name, int hp, POSITION position) {
-	if (num_harvesters >= MAX_HARVESTERS) return false;
-
-	Harvester* harvester = &harvesters[num_harvesters++];
-	snprintf(harvester->name, sizeof(harvester->name), "%s", name);
-	harvester->hp = hp;
-	harvester->state = HARVESTER_WAITING;
-	harvester->position = position;
-	harvester->target = position;
-	harvester->spice_carried = 0;
-	harvester->timer = 0;
-
-	return true;
-}
-
-void update_harvesters() {
-	for (int i = 0; i < num_harvesters; i++) {
-		Harvester* harvester = &harvesters[i];
-		switch (harvester->state) {
-		case HARVESTER_WAITING:
-			break;
-		case HARVESTER_MOVING:
-			if (harvester->timer <= 0) {
-				if (harvester->position.row == harvester->target.row &&
-					harvester->position.column == harvester->target.column) {
-					if (map[0][harvester->target.row][harvester->target.column] == TERRAIN_SPICE) {
-						harvester->state = HARVESTER_HARVESTING;
-						harvester->timer = 3000;  
-					}
-					else {
-						harvester->state = HARVESTER_WAITING;
-					}
-				}
-				else {
-					if (harvester->position.row < harvester->target.row)
-						harvester->position.row++;
-					else if (harvester->position.row > harvester->target.row)
-						harvester->position.row--;
-
-					if (harvester->position.column < harvester->target.column)
-						harvester->position.column++;
-					else if (harvester->position.column > harvester->target.column)
-						harvester->position.column--;
-					harvester->timer = 500;  
-				}
-			}
-			else {
-				harvester->timer -= TICK;
-			}
-			break;
-		case HARVESTER_HARVESTING:
-			if (harvester->timer <= 0) {
-				harvester->spice_carried += 5; 
-				if (harvester->spice_carried >= 20) {
-					harvester->state = HARVESTER_MOVING;
-					harvester->target = (POSITION){ 1, 1 };  
-				}
-				else {
-					harvester->timer = 3000;  
-				}
-			}
-			else {
-				harvester->timer -= TICK;
-			}
-			break;
-		}
-	}
-}
-
-void harvester_command(Harvester* harvester, POSITION target, HarvesterState command) {
-	if (command == HARVESTER_MOVING) {
-		harvester->state = HARVESTER_MOVING;
-		harvester->target = target;
-		harvester->timer = 500;  // 이동 시간
-	}
-	else if (command == HARVESTER_HARVESTING) {
-		harvester->state = HARVESTER_HARVESTING;
-		harvester->target = target;
-		harvester->timer = 3000;  // 수확 시간
 	}
 }
 
