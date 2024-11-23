@@ -9,7 +9,8 @@
 typedef enum {
 	HARVESTER_WAITING,
 	HARVESTER_MOVING,
-	HARVESTER_HARVESTING
+	HARVESTER_HARVESTING,
+	HARVESTER_RETURNING
 } HarvesterState;
 
 typedef struct {
@@ -147,7 +148,7 @@ void update_harvesters() {
 			if (harvester->timer <= 0) {
 				harvester->spice_carried += 5;
 				if (harvester->spice_carried >= 20) {
-					harvester->state = HARVESTER_MOVING;
+					harvester->state = HARVESTER_RETURNING;
 					harvester->target = (POSITION){ 1, 1 };
 				}
 				else {
@@ -158,21 +159,17 @@ void update_harvesters() {
 				harvester->timer -= TICK;
 			}
 			break;
+		case HARVESTER_RETURNING:
+			harvester_return(harvester);
+			break;
 		}
 	}
 }
 
 void harvester_command(Harvester* harvester, POSITION target, HarvesterState command) {
-	if (command == HARVESTER_MOVING) {
-		harvester->state = HARVESTER_MOVING;
-		harvester->target = target;
-		harvester->timer = 500;  // 이동 시간
-	}
-	else if (command == HARVESTER_HARVESTING) {
-		harvester->state = HARVESTER_HARVESTING;
-		harvester->target = target;
-		harvester->timer = 3000;  // 수확 시간
-	}
+	harvester->state = command;
+	harvester->target = target;
+	harvester->timer = 500;
 }
 
 void harvester_harvest(Harvester* harvester) {
