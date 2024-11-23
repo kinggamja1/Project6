@@ -47,6 +47,18 @@ void init_soldiers() {
 	}
 }
 
+bool add_soldier(const char* name, int hp, POSITION position) {
+	if (num_soldiers >= MAX_SOLDIERS) return false;
+
+	Soldier* soldier = &soldiers[num_soldiers++];
+	snprintf(soldier->name, sizeof(soldier->name), "%s", name);
+	soldier->hp = hp;
+	soldier->state = UNIT_WAITING;
+	soldier->position = position;
+	soldier->target = position;
+	return true;
+}
+
 
 
 
